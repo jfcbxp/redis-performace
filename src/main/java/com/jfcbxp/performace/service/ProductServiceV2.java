@@ -12,8 +12,11 @@ public class ProductServiceV2 {
     @Autowired
     private CacheTemplate<Integer,Product> cacheTemplate;
 
+    @Autowired
+    private ProductVisitService visitService;
+
     public Mono<Product> getProduct(int id){
-        return this.cacheTemplate.get(id);
+        return this.cacheTemplate.get(id).doFirst(() -> this.visitService.addVisit(id));
 
     }
 
